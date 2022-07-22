@@ -1,22 +1,12 @@
-pipeline {
-agent {
-node {
-label 'nodejs'
+node('nodejs') {
+stage('Checkout') {
+git branch: 'main',
+url: 'https://github.com/nurafizakaria/do400-pipelines-control'
 }
+stage('Backend Tests') {
+sh 'node ./backend/test.js'
 }
-parameters {
-booleanParam(name: "RUN_FRONTEND_TESTS", defaultValue: true)
-}
-stages {
-stage('Run Tests') {
-}
-stage('Deploy') {
-when {
-expression { env.GIT_BRANCH == 'origin/main' }
-}
-steps {
-echo 'Deploying...'
-}
-}
+stage('Frontend Tests') {
+sh 'node ./frontend/test.js'
 }
 }
